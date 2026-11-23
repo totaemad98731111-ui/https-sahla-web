@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<style>html,body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>مطبخ سهلة</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Lalezar&display=swap">
+<style>
+/* Layout: sticky header + tab nav, four hash-routed pages (home / menu / order / info), cream ground with terracotta and olive taken from the logo */
+:root{
+  --bg:#FBF0E4; --surface:#FFF8F0; --ink:#3B1F14; --muted:#7B5B4B; --line:#EBD5C0;
+  --accent:#B8452A; --accent-ink:#FFF8F0; --ring:#D98E3F; --green:#66752B; --green-soft:#E8EBCB;
+  --display:'Lalezar','Cairo',system-ui,sans-serif; --body:'Cairo',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1D1410; --surface:#2A1D17; --ink:#F7E8D9; --muted:#C9A992; --line:#45322B;
+  --accent:#E4704F; --accent-ink:#2A1209; --ring:#E3A455; --green:#AFC060; --green-soft:#2F3519; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1D1410; --surface:#2A1D17; --ink:#F7E8D9; --muted:#C9A992; --line:#45322B;
+  --accent:#E4704F; --accent-ink:#2A1209; --ring:#E3A455; --green:#AFC060; --green-soft:#2F3519; color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.65;direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1080px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:1.2;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.4rem,7vw,4.2rem)} h2{font-size:clamp(1.7rem,4.5vw,2.4rem)} h3{font-size:1.25rem}
+p{margin:0}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+
+/* header */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)))}
+.head{display:flex;align-items:center;gap:12px;padding:10px max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px));max-width:1112px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;margin-inline-end:auto}
+.brand img{width:46px;height:46px;border-radius:50%}
+.brand b{font-family:var(--display);font-weight:400;font-size:1.6rem;color:var(--accent);line-height:1}
+.cartpill{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;border-radius:999px;padding:7px 14px;font-size:.95rem}
+.cartpill span{background:var(--accent-ink);color:var(--accent);border-radius:999px;min-width:22px;text-align:center;font-size:.85rem;padding:0 6px}
+nav{display:flex;gap:4px;overflow-x:auto;padding:0 max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px));max-width:1112px;margin:0 auto;scrollbar-width:none}
+nav a{white-space:nowrap;text-decoration:none;font-weight:600;padding:6px 14px;border-radius:999px;color:var(--muted)}
+nav a[aria-current="page"]{background:var(--green-soft);color:var(--green)}
+
+/* pages */
+main{padding-block:28px 56px;min-height:60vh}
+.page{display:none}.page.on{display:block}
+.eyebrow{color:var(--green);font-weight:700;font-size:.9rem;letter-spacing:.02em}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-weight:700;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:10px 20px;text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.green{background:var(--green);border-color:var(--green);color:var(--accent-ink)}
+.btn[aria-disabled="true"]{opacity:.5;cursor:not-allowed}
+
+/* home */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:center}
+.hero h1 span{color:var(--accent)}
+.hero p.lead{font-size:1.1rem;color:var(--muted);margin:14px 0 22px;max-width:34ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.heroimg{position:relative}
+.heroimg img.main{width:100%;aspect-ratio:4/3.4;object-fit:cover;border-radius:28px;border:4px solid var(--ring)}
+.heroimg img.logo{position:absolute;width:30%;max-width:130px;inset-inline-start:-10px;bottom:-18px;border-radius:50%;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:44px}
+.fact{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.fact b{display:block;color:var(--accent);font-size:1.05rem}
+.fact small{color:var(--muted);font-size:.9rem}
+.sec{margin-top:52px}
+.sec>.row{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.card img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.card .in{padding:12px 14px 14px;display:flex;flex-direction:column;gap:8px;flex:1}
+.card .pr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+.price{font-weight:900;color:var(--accent);font-size:1.1rem;font-variant-numeric:tabular-nums}
+.price small{font-weight:600;color:var(--muted);font-size:.8rem}
+.add{font:inherit;font-weight:700;border:2px solid var(--green);color:var(--green);background:transparent;border-radius:10px;padding:4px 14px;cursor:pointer}
+.add:hover{background:var(--green);color:var(--accent-ink)}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.gal img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:14px}
+
+/* menu */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 22px}
+.tabs button{font:inherit;font-weight:700;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 16px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.items{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:12px}
+.item{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px}
+.item img{width:84px;height:84px;object-fit:cover;border-radius:12px;flex:none}
+.item .t{flex:1;min-width:0}
+.item h3{font-family:var(--body);font-weight:700;font-size:1.05rem;line-height:1.35}
+.item p{color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:2px}
+.item .side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none}
+.catnote{color:var(--muted);font-size:.9rem;margin-bottom:14px}
+
+.menuimgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px;margin-top:16px}
+.menuimgs img{width:100%;height:auto;border-radius:16px;border:1px solid var(--line)}
+/* order */
+.order{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;align-items:start;margin-top:20px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.line{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.line:last-child{border-bottom:0}
+.line .n{flex:1;min-width:0;font-weight:600}
+.qty{display:inline-flex;align-items:center;gap:2px}
+.qty button{width:30px;height:30px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-weight:900;cursor:pointer}
+.qty output{min-width:26px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.sum{display:flex;justify-content:space-between;gap:10px;padding-top:12px;font-weight:700}
+.sum.big{font-size:1.2rem;color:var(--accent)}
+.note{background:var(--green-soft);color:var(--green);border-radius:12px;padding:10px 12px;font-size:.92rem;font-weight:600;margin-top:12px}
+label{display:block;font-weight:700;margin:12px 0 4px;font-size:.95rem}
+input[type=text],input[type=tel],textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:9px 12px}
+textarea{min-height:76px;resize:vertical}
+.pay{display:flex;gap:10px;flex-wrap:wrap}
+.pay label{display:flex;align-items:center;gap:8px;margin:0;border:2px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;background:var(--bg)}
+.pay input{accent-color:var(--accent)}
+.actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.empty{text-align:center;padding:26px 8px;color:var(--muted)}
+.empty .btn{margin-top:14px}
+.msg{margin-top:8px;font-size:.9rem;color:var(--accent);font-weight:600;min-height:1.4em}
+
+/* info */
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:20px}
+.info .box h3{color:var(--accent);margin-bottom:6px}
+.info .box p{color:var(--muted)}
+.info .box b{color:var(--ink)}
+.num{direction:ltr;unicode-bidi:isolate;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.addr{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+
+footer{border-top:1px solid var(--line);padding-block:20px 28px;color:var(--muted);font-size:.9rem;display:flex;gap:12px;flex-wrap:wrap;justify-content:space-between}
+.toast{position:fixed;inset-inline:0;bottom:calc(20px + env(safe-area-inset-bottom,0px));margin:auto;width:max-content;max-width:90%;background:var(--ink);color:var(--bg);padding:9px 18px;border-radius:999px;font-weight:700;opacity:0;transform:translateY(12px);transition:.25s;pointer-events:none;z-index:40}
+.toast.on{opacity:1;transform:none}
+@media (max-width:760px){
+  .hero,.order{grid-template-columns:1fr}
+  .heroimg{order:-1}
+  .item img{width:68px;height:68px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header>
+  <div class="head">
+    <a class="brand" href="#home"><img src="img/logo.png" alt="شعار سهلة" width="46" height="46"><b>سهلة</b></a>
+    <a class="cartpill" href="#order" aria-label="السلة">السلة <span id="cnt">0</span></a>
+  </div>
+  <nav aria-label="الصفحات">
+    <a href="#home" data-p="home">الرئيسية</a>
+    <a href="#menu" data-p="menu">المنيو</a>
+    <a href="#order" data-p="order">اطلب</a>
+    <a href="#info" data-p="info">التوصيل والتواصل</a>
+  </nav>
+</header>
+
+<div class="wrap">
+<main>
+
+<!-- HOME -->
+<section class="page" id="p-home">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">مطبخ سهلة · مصر الجديدة</div>
+      <h1>أكل <span>سهل</span> وطعمه حلو، لحد باب بيتك</h1>
+      <p class="lead">وجبات جريل وكرسبي وشاورما وسندوتشات فطار، تتجهز طازة وتوصلك في ١٥ إلى ٣٠ دقيقة تجهيز.</p>
+      <div class="cta">
+        <a class="btn" href="#menu">شوف المنيو</a>
+        <a class="btn ghost" href="#order">اطلب دلوقتي</a>
+      </div>
+    </div>
+    <div class="heroimg">
+      <img class="main" src="img/f01.jpg" alt="وجبة شيش طاووق مع أرز وبطاطس وسلطة">
+      <img class="logo" src="img/logo.png" alt="">
+    </div>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><b>تجهيز ١٥ – ٣٠ دقيقة</b><small>كل طلب بيتحضر لما تطلبه</small></div>
+    <div class="fact"><b>مفيش حد أدنى</b><small>اطلب أي حاجة، حتى سندوتش واحد</small></div>
+    <div class="fact"><b>كاش أو إنستا باي</b><small>تدفع براحتك عند الاستلام</small></div>
+    <div class="fact"><b>توصيل لحد الباب</b><small>تكلفته بتتحدد لما تكتب عنوانك</small></div>
+  </div>
+
+  <div class="sec">
+    <div class="row"><div><div class="eyebrow">من المنيو</div><h2>أطباق الأكتر طلباً</h2></div><a class="btn ghost" href="#menu">كل المنيو</a></div>
+    <div class="grid" id="featured"></div>
+  </div>
+
+  <div class="sec">
+    <div class="row"><div><div class="eyebrow">من مطبخنا</div><h2>صور من الأطباق</h2></div></div>
+    <div class="gal" id="gal"></div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="page" id="p-menu">
+  <div class="eyebrow">منيو الوجبات والسندوتشات</div>
+  <h2>المنيو</h2>
+  <div class="tabs" id="tabs" role="group" aria-label="أقسام المنيو"></div>
+  <p class="catnote" id="catnote"></p>
+  <div class="items" id="items"></div>
+  <div class="sec">
+    <div class="eyebrow">المنيو الأصلي</div>
+    <h2>منيو سهلة بالصور</h2>
+    <div class="menuimgs">
+      <img src="img/menu1.jpg" alt="منيو الوجبات" loading="lazy">
+      <img src="img/menu2.jpg" alt="منيو سندوتشات الفطار واللحوم" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="page" id="p-order">
+  <div class="eyebrow">طلبك</div>
+  <h2>السلة وبيانات التوصيل</h2>
+  <div class="order">
+    <div class="box" id="cartbox"></div>
+    <form class="box" id="form" autocomplete="on" novalidate>
+      <h3>بيانات التوصيل</h3>
+      <label for="nm">الاسم</label>
+      <input type="text" id="nm" name="name" autocomplete="name">
+      <label for="ph">رقم الموبايل</label>
+      <input type="tel" id="ph" name="phone" inputmode="tel" autocomplete="tel" dir="ltr" style="text-align:right">
+      <label for="ad">العنوان بالتفصيل</label>
+      <textarea id="ad" name="address" autocomplete="street-address" placeholder="الشارع، رقم العمارة، الدور، علامة مميزة"></textarea>
+      <label for="nt">ملاحظات وصوص الاختيار</label>
+      <textarea id="nt" name="notes" placeholder="مثال: صوص ثوم، من غير بصل"></textarea>
+      <label id="paylbl">طريقة الدفع</label>
+      <div class="pay" role="radiogroup" aria-labelledby="paylbl">
+        <label><input type="radio" name="pay" value="كاش" checked> كاش</label>
+        <label><input type="radio" name="pay" value="إنستا باي"> إنستا باي</label>
+      </div>
+      <div class="note">تكلفة التوصيل بتتحدد لما تكتب عنوانك، وهنأكدها معاك قبل ما الطلب يتجهز.</div>
+      <div class="actions">
+        <a class="btn green" id="wa" href="#order" target="_blank" rel="noopener">ابعت الطلب على واتساب</a>
+        <button class="btn ghost" type="button" id="copy">انسخ الطلب</button>
+        <a class="btn ghost" href="tel:01558535089">اتصل واطلب: <span class="num">01558535089</span></a>
+      </div>
+      <div class="msg" id="msg" role="status"></div>
+    </form>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="page" id="p-info">
+  <div class="eyebrow">التوصيل والتواصل</div>
+  <h2>إزاي توصلنا</h2>
+  <div class="info">
+    <div class="box">
+      <h3>العنوان</h3>
+      <p><b>مصر الجديدة · روكسي</b><br>بجوار ماكدونالدز، داخل كافيه كيان</p>
+      <div class="addr"><a class="btn" href="https://maps.app.goo.gl/ZKwtnJARuRPmobsV9" target="_blank" rel="noopener">افتح الخريطة</a></div>
+    </div>
+    <div class="box">
+      <h3>اطلب بالتليفون</h3>
+      <p>اتصل بينا أو اطلب من الموقع.</p>
+      <p style="margin-top:8px;font-size:1.4rem"><span class="num" style="color:var(--accent)">01558535089</span></p>
+      <div class="addr"><a class="btn" href="tel:01558535089">اتصل</a><button class="btn ghost" type="button" id="copyph">انسخ الرقم</button></div>
+    </div>
+    <div class="box">
+      <h3>التوصيل</h3>
+      <p>متاح توصيل لحد باب البيت. تكلفة التوصيل بتتحدد لما تكتب عنوانك. مفيش حد أدنى للطلب.</p>
+    </div>
+    <div class="box">
+      <h3>التجهيز والدفع</h3>
+      <p>التجهيز من <b>١٥ إلى ٣٠ دقيقة</b>.<br>الدفع <b>كاش</b> أو <b>إنستا باي</b>.</p>
+    </div>
+    <div class="box">
+      <h3>تابعنا</h3>
+      <p>فيسبوك: <b>سهلة Sahla</b></p>
+      <p style="margin-top:4px">تيك توك: <a href="https://www.tiktok.com/@sahla.kitchen" target="_blank" rel="noopener"><b class="num">sahla.kitchen</b></a></p>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer><span>مطبخ سهلة · مصر الجديدة</span><span>الأسعار بالجنيه المصري</span></footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+var PH="201558535089";
+var M=[
+ {id:"m1",c:"meals",n:"وجبة نص فرخة",p:270,d:"نص فرخة بالعظم، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m2",c:"meals",n:"وجبة كفتة جريل",p:240,d:"٤ قطع كفتة، خضار، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m3",c:"meals",n:"وجبة شاورما لحم جريل",p:250,i:"img/f05.jpg",d:"قطع لحم فيليه، خضار، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m4",c:"meals",n:"وجبة شيش طاووق",p:220,i:"img/f01.jpg",d:"٣ سيخ شيش، خضار، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m5",c:"meals",n:"وجبة دجاج جريل",p:200,i:"img/f00.jpg",d:"قطع دجاج مشوية، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m6",c:"meals",n:"وجبة دجاج بانيه",p:200,d:"٣ قطع دجاج بانيه، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m7",c:"meals",n:"وجبة كرسبي",p:180,i:"img/f13.jpg",d:"٤ قطع كرسبي، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m8",c:"meals",n:"وجبة شاورما فراخ جريل",p:180,d:"قطع دجاج، خضار، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m9",c:"meals",n:"وجبة كفتة داود باشا",p:180,d:"كرات لحم، صوص طماطم، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m10",c:"meals",n:"وجبة سجق شرقي",p:170,i:"img/f08.jpg",d:"سجق شرقي، خضار، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+ {id:"m11",c:"meals",n:"وجبة كبدة اسكندراني",p:170,d:"كبدة، فلفل أخضر، أرز بسمتي، فرانش فرايز، سلطة خضراء، صوص من اختيارك"},
+
+ {id:"b1",c:"bf",n:"سندوتش فول",p:15},
+ {id:"b2",c:"bf",n:"سندوتش فرانش فرايز",p:25},
+ {id:"b3",c:"bf",n:"سندوتش فرانش فرايز بالجبنة",p:40},
+ {id:"b4",c:"bf",n:"سندوتش جبنة رومي",p:35},
+ {id:"b5",c:"bf",n:"سندوتش بيض مسلوق",p:25},
+ {id:"b6",c:"bf",n:"سندوتش أومليت سادة",p:30},
+ {id:"b7",c:"bf",n:"سندوتش أومليت بسطرمة",p:55},
+ {id:"b8",c:"bf",n:"سندوتش أومليت خضار",p:35},
+ {id:"b9",c:"bf",n:"سندوتش أومليت سجق",p:45},
+ {id:"b10",c:"bf",n:"سندوتش بيض مدحرج",p:35},
+
+ {id:"s1",c:"meat",n:"سندوتش دجاج بانيه",p:120},
+ {id:"s2",c:"meat",n:"سندوتش دجاج كرسبي",p:120,i:"img/f15.jpg"},
+ {id:"s3",c:"meat",n:"سندوتش شيش طاووق",p:130},
+ {id:"s4",c:"meat",n:"سندوتش دجاج جريل",p:140},
+ {id:"s5",c:"meat",n:"سندوتش شاورما فراخ جريل",p:130},
+ {id:"s6",c:"meat",n:"سندوتش شاورما لحم جريل",p:150,i:"img/f12.jpg"},
+ {id:"s7",c:"meat",n:"سندوتش كفتة جريل",p:140},
+ {id:"s8",c:"meat",n:"سندوتش كبدة اسكندراني",p:100},
+ {id:"s9",c:"meat",n:"سندوتش سجق شرقي",p:100},
+ {id:"s10",c:"meat",n:"حواوشي",p:70,i:"img/f03.jpg"}
+];
+var CATS=[
+ {k:"meals",t:"الوجبات",note:"كل الوجبات بتيجي مع أرز بسمتي وفرانش فرايز وسلطة خضراء وصوص من اختيارك."},
+ {k:"bf",t:"سندوتشات الفطار",note:""},
+ {k:"meat",t:"سندوتشات اللحوم",note:""}
+];
+var FEAT=["m3","m4","m7","m10"];
+var GAL=[["f02","سندوتش كرسبي بصوص الجبنة"],["f07","برجر مع بطاطس"],["f04","كبة"],["f06","سمبوسك"],["f14","طاجن بالجبنة"],["f10","كرسبي بالمايونيز"],["f11","شاورما لحم"],["f09","برجر"]];
+var cart={},cat="meals";
+try{var s=localStorage.getItem("sahla-cart");if(s)cart=JSON.parse(s)||{}}catch(e){}
+var $=function(i){return document.getElementById(i)};
+function byId(id){for(var i=0;i<M.length;i++)if(M[i].id===id)return M[i]}
+function fmt(n){return n.toLocaleString("en-US")}
+function save(){try{localStorage.setItem("sahla-cart",JSON.stringify(cart))}catch(e){}}
+function count(){var c=0;for(var k in cart)c+=cart[k];return c}
+function total(){var t=0;for(var k in cart){var m=byId(k);if(m)t+=m.p*cart[k]}return t}
+var tt;function toast(x){var e=$("toast");e.textContent=x;e.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){e.classList.remove("on")},1600)}
+
+function card(m){
+  return '<div class="card">'+(m.i?'<img src="'+m.i+'" alt="'+m.n+'" loading="lazy">':'')+
+  '<div class="in"><h3>'+m.n+'</h3>'+(m.d?'<p style="color:var(--muted);font-size:.9rem">'+m.d+'</p>':'')+
+  '<div class="pr"><span class="price">'+m.p+' <small>جنيه</small></span><button class="add" data-add="'+m.id+'" type="button">أضف</button></div></div></div>'
+}
+function renderHome(){
+  $("featured").innerHTML=FEAT.map(function(i){return card(byId(i))}).join("");
+  $("gal").innerHTML=GAL.map(function(g){return '<img src="img/'+g[0]+'.jpg" alt="'+g[1]+'" loading="lazy">'}).join("")
+}
+function renderMenu(){
+  $("tabs").innerHTML=CATS.map(function(c){return '<button type="button" data-cat="'+c.k+'" aria-pressed="'+(c.k===cat)+'">'+c.t+'</button>'}).join("");
+  var cur=CATS.filter(function(c){return c.k===cat})[0];
+  $("catnote").textContent=cur.note;
+  $("items").innerHTML=M.filter(function(m){return m.c===cat}).map(function(m){
+    return '<div class="item">'+(m.i?'<img src="'+m.i+'" alt="'+m.n+'" loading="lazy">':'')+
+    '<div class="t"><h3>'+m.n+'</h3>'+(m.d?'<p>'+m.d+'</p>':'')+'</div>'+
+    '<div class="side"><span class="price">'+m.p+' <small>جنيه</small></span><button class="add" data-add="'+m.id+'" type="button">أضف</button></div></div>'
+  }).join("")
+}
+function renderCart(){
+  $("cnt").textContent=count();
+  var ids=Object.keys(cart).filter(function(k){return byId(k)&&cart[k]>0});
+  var box=$("cartbox");
+  if(!ids.length){box.innerHTML='<div class="empty"><b>السلة فاضية</b><br>اختار من المنيو وهيظهر طلبك هنا.<br><a class="btn" href="#menu">روح للمنيو</a></div>';return}
+  box.innerHTML='<h3 style="margin-bottom:4px">طلبك</h3>'+ids.map(function(k){var m=byId(k);
+    return '<div class="line"><div class="n">'+m.n+'<br><span class="price" style="font-size:.9rem">'+fmt(m.p*cart[k])+' <small>جنيه</small></span></div>'+
+    '<div class="qty"><button type="button" data-dec="'+k+'" aria-label="تقليل">−</button><output>'+cart[k]+'</output><button type="button" data-inc="'+k+'" aria-label="زيادة">+</button></div></div>'
+  }).join("")+
+  '<div class="sum"><span>إجمالي الأكل</span><span class="price">'+fmt(total())+' جنيه</span></div>'+
+  '<div class="sum"><span>التوصيل</span><span style="color:var(--muted);font-weight:600">بيتحدد حسب العنوان</span></div>'+
+  '<div class="sum big"><span>الإجمالي بدون التوصيل</span><span>'+fmt(total())+' جنيه</span></div>'
+}
+function orderText(){
+  var ids=Object.keys(cart).filter(function(k){return byId(k)&&cart[k]>0});
+  var L=["طلب جديد من موقع سهلة",""];
+  ids.forEach(function(k){var m=byId(k);L.push(cart[k]+" × "+m.n+" = "+fmt(m.p*cart[k])+" جنيه")});
+  L.push("","إجمالي الأكل: "+fmt(total())+" جنيه (التوصيل يتحدد حسب العنوان)","");
+  L.push("الاسم: "+$("nm").value.trim());
+  L.push("الموبايل: "+$("ph").value.trim());
+  L.push("العنوان: "+$("ad").value.trim());
+  var nt=$("nt").value.trim();if(nt)L.push("ملاحظات: "+nt);
+  L.push("الدفع: "+document.querySelector('input[name=pay]:checked').value);
+  return L.join("\n")
+}
+function problem(){
+  if(!count())return "السلة فاضية، أضف أطباق من المنيو الأول.";
+  if(!$("nm").value.trim()||!$("ph").value.trim()||!$("ad").value.trim())return "اكتب الاسم ورقم الموبايل والعنوان.";
+  return ""
+}
+function refreshWa(){$("wa").href="https://wa.me/"+PH+"?text="+encodeURIComponent(orderText())}
+
+function route(){
+  var h=(location.hash||"#home").slice(1);if(["home","menu","order","info"].indexOf(h)<0)h="home";
+  ["home","menu","order","info"].forEach(function(p){$("p-"+p).classList.toggle("on",p===h)});
+  document.querySelectorAll("nav a").forEach(function(a){if(a.dataset.p===h)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  window.scrollTo(0,0)
+}
+document.addEventListener("click",function(e){
+  var t=e.target.closest("button,a");if(!t)return;
+  if(t.dataset.add){cart[t.dataset.add]=(cart[t.dataset.add]||0)+1;save();renderCart();toast("اتضاف للسلة")}
+  else if(t.dataset.inc){cart[t.dataset.inc]++;save();renderCart()}
+  else if(t.dataset.dec){cart[t.dataset.dec]--;if(cart[t.dataset.dec]<=0)delete cart[t.dataset.dec];save();renderCart()}
+  else if(t.dataset.cat){cat=t.dataset.cat;renderMenu()}
+  else if(t.id==="wa"){var p=problem();if(p){e.preventDefault();$("msg").textContent=p}else{refreshWa();$("msg").textContent="هيتفتح واتساب برسالة الطلب جاهزة، اضغط إرسال."}}
+  else if(t.id==="copy"){var p2=problem();if(p2){$("msg").textContent=p2;return}
+    var tx=orderText();
+    (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(tx):Promise.reject()).then(function(){$("msg").textContent="اتنسخ الطلب."},function(){var a=$("nt");$("msg").textContent="مقدرناش ننسخ تلقائي، اكتب الطلب في رسالة أو كلمنا."})}
+  else if(t.id==="copyph"){(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText("01558535089"):Promise.reject()).then(function(){toast("اتنسخ الرقم")},function(){toast("01558535089")})}
+});
+$("form").addEventListener("submit",function(e){e.preventDefault()});
+$("form").addEventListener("input",function(){$("msg").textContent="";refreshWa()});
+window.addEventListener("hashchange",route);
+renderHome();renderMenu();renderCart();refreshWa();route();
+</script>
+
+</html>
